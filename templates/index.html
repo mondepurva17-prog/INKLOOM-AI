@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inkloom AI | Brand Governance</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+
+<!-- LOGIN -->
+<section id="login-screen" class="login-screen">
+    <div class="login-card">
+        <div class="brand-logo">✦ Inkloom AI</div>
+        <p class="eyebrow">BRAND GOVERNANCE PLATFORM</p>
+        <h1>Make every word<br>on-brand.</h1>
+        <p class="muted">Analyze, improve and approve your content.</p>
+
+        <form id="login-form">
+            <label>Email</label>
+            <input id="login-email" type="email" required
+                   placeholder="Enter demo email">
+
+            <label>Password</label>
+            <input id="login-password" type="password" required
+                   placeholder="Enter password">
+
+            <button class="primary-btn" type="submit">Sign in</button>
+            <p id="login-message" class="message"></p>
+        </form>
+
+        <div class="demo-box">
+            <strong>Try the demo accounts</strong>
+            <button class="demo-account" type="button"
+                data-email="admin@inkloom.demo"
+                data-password="Admin@123">Admin demo</button>
+            <button class="demo-account" type="button"
+                data-email="reviewer@inkloom.demo"
+                data-password="Review@123">Reviewer demo</button>
+            <button class="demo-account" type="button"
+                data-email="creator@inkloom.demo"
+                data-password="Create@123">Creator demo</button>
+        </div>
+    </div>
+</section>
+
+<!-- APPLICATION -->
+<div id="app-screen" class="app-layout" hidden>
+
+    <aside class="sidebar">
+        <div class="brand-logo">✦ Inkloom AI</div>
+        <p class="sidebar-label">WORKSPACE</p>
+
+        <button class="nav-btn active" data-page="dashboard">Dashboard</button>
+        <button class="nav-btn" data-page="analyzer">Content analyzer</button>
+        <button class="nav-btn" data-page="reviews">Team reviews</button>
+        <button class="nav-btn" data-page="analytics">Analytics</button>
+        <button class="nav-btn admin-only" data-page="guidelines">Brand guidelines</button>
+        <button class="nav-btn" data-page="audit">Audit trail</button>
+
+        <div class="sidebar-bottom">
+            <p id="user-name"></p>
+            <small id="user-role"></small>
+            <button id="logout-button" class="logout-btn">Log out</button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">INKLOOM AI WORKSPACE</p>
+                <h2 id="page-heading">Dashboard</h2>
+            </div>
+            <span id="connection-status" class="connection">Checking...</span>
+        </header>
+
+        <!-- DASHBOARD -->
+        <section class="page active" id="page-dashboard">
+            <div class="welcome-card">
+                <p class="eyebrow">YOUR BRAND. YOUR VOICE.</p>
+                <h1>Welcome to Inkloom AI</h1>
+                <p>Keep every piece of content clear, consistent and compliant.</p>
+                <button class="primary-btn" data-go="analyzer">Analyze content →</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card"><span>Total reviews</span><strong id="stat-total">0</strong></div>
+                <div class="stat-card"><span>Approved</span><strong id="stat-approved">0</strong></div>
+                <div class="stat-card"><span>Pending</span><strong id="stat-pending">0</strong></div>
+                <div class="stat-card"><span>Average score</span><strong id="stat-average">0%</strong></div>
+            </div>
+
+            <div class="panel">
+                <h3>Recent reviews</h3>
+                <div id="dashboard-reviews" class="review-list">Loading...</div>
+            </div>
+        </section>
+
+        <!-- ANALYZER -->
+        <section class="page" id="page-analyzer">
+            <div class="panel">
+                <h3>Content compliance analyzer</h3>
+                <p class="muted">Paste your marketing content to check its brand compliance.</p>
+
+                <textarea id="content-input"
+                    placeholder="Paste your content here..."
+                    rows="8"></textarea>
+
+                <div class="button-row">
+                    <button id="analyze-button" class="primary-btn">Analyze content</button>
+                    <button id="clear-button" class="secondary-btn">Clear</button>
+                </div>
+
+                <p id="analysis-status" class="message"></p>
+            </div>
+
+            <div id="analysis-results" hidden>
+                <div class="score-card">
+                    <span>Compliance score</span>
+                    <strong id="compliance-score">0%</strong>
+                    <p id="score-summary"></p>
+                </div>
+
+                <div class="panel">
+                    <h3>Detected issues and suggested rewrites</h3>
+                    <div id="findings-list"></div>
+                </div>
+
+                <div class="panel">
+                    <h3>Submit for team review</h3>
+                    <p class="muted">Your analysis is saved automatically.</p>
+                    <p id="decision-message" class="message"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- REVIEWS -->
+        <section class="page" id="page-reviews">
+            <div class="panel">
+                <div class="section-heading">
+                    <h3>Team review queue</h3>
+                    <button id="refresh-reviews" class="secondary-btn">Refresh</button>
+                </div>
+                <div id="reviews-list"></div>
+            </div>
+        </section>
+
+        <!-- ANALYTICS -->
+        <section class="page" id="page-analytics">
+            <div class="stats-grid">
+                <div class="stat-card"><span>Total reviews</span><strong id="analytics-total">0</strong></div>
+                <div class="stat-card"><span>Approved</span><strong id="analytics-approved">0</strong></div>
+                <div class="stat-card"><span>Pending</span><strong id="analytics-pending">0</strong></div>
+                <div class="stat-card"><span>Average score</span><strong id="analytics-average">0%</strong></div>
+            </div>
+
+            <div class="panel">
+                <h3>Most frequent violations</h3>
+                <div id="violations-list"></div>
+            </div>
+
+            <div class="panel">
+                <h3>Compliance score trend</h3>
+                <div id="trend-list"></div>
+            </div>
+        </section>
+
+        <!-- GUIDELINES -->
+        <section class="page" id="page-guidelines">
+            <div class="panel">
+                <h3>Brand guidelines</h3>
+                <label>Brand name</label>
+                <input id="brand-name">
+
+                <label>Brand tone</label>
+                <input id="brand-tone">
+
+                <label>Approved terms (comma separated)</label>
+                <textarea id="approved-terms" rows="2"></textarea>
+
+                <label>Forbidden terms (comma separated)</label>
+                <textarea id="forbidden-terms" rows="2"></textarea>
+
+                <label>Required terms (comma separated)</label>
+                <textarea id="required-terms" rows="2"></textarea>
+
+                <button id="save-guidelines" class="primary-btn">Save guidelines</button>
+                <p id="guidelines-status" class="message"></p>
+            </div>
+        </section>
+
+        <!-- AUDIT -->
+        <section class="page" id="page-audit">
+            <div class="panel">
+                <h3>Review audit trail</h3>
+                <div id="audit-list"></div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+</body>
+</html>
